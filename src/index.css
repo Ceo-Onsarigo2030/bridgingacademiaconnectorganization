@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ivory text-ink font-body;
+}
+
+::selection {
+  @apply bg-gold/30 text-ink;
+}
+
+.container-page {
+  @apply max-w-7xl mx-auto px-5 sm:px-8 lg:px-12;
+}
+
+.eyebrow {
+  @apply font-label uppercase tracking-[0.25em] text-xs text-gold-deep;
+}
+
+.btn-gold {
+  @apply inline-flex items-center gap-2 bg-gold text-ink font-label font-semibold text-sm px-6 py-3 rounded-full hover:bg-gold-light transition-colors duration-200;
+}
+
+.btn-outline {
+  @apply inline-flex items-center gap-2 border border-gold/60 text-gold font-label font-semibold text-sm px-6 py-3 rounded-full hover:bg-gold hover:text-ink transition-colors duration-200;
+}
+
+.read-more-body {
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
