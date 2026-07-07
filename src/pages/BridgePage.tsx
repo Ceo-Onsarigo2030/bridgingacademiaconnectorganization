@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, FormEvent } from "react";
-import { Send, ShieldHeart, ArrowLeft } from "lucide-react";
+import { Send, ShieldCheck, ArrowLeft } from "lucide-react";
 import { supabase } from "../lib/supabase";
 
 interface ChatMessage {
@@ -62,7 +62,7 @@ export default function BridgePage() {
         <a href="/" className="text-ivory/60 hover:text-gold">
           <ArrowLeft size={20} />
         </a>
-        <ShieldHeart className="text-gold" size={22} />
+        <ShieldCheck className="text-gold" size={22} />
         <div>
           <p className="font-display text-gold text-base leading-none">Bridge AI</p>
           <p className="text-ivory/40 text-[11px] mt-1">Gender support &amp; mental wellness</p>
