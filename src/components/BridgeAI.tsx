@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, FormEvent } from "react";
-import { MessageCircleHeart, X, Send, ShieldHeart, Maximize2 } from "lucide-react";
+import { MessageCircleHeart, X, Send, ShieldCheck, Maximize2 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 
 interface ChatMessage {
@@ -67,7 +67,7 @@ export default function BridgeAI() {
       {open && (
         <div className="fixed bottom-24 right-5 z-50 w-[92vw] max-w-sm h-[70vh] max-h-[560px] bg-ink rounded-2xl shadow-2xl border border-gold/20 flex flex-col overflow-hidden">
           <div className="bg-charcoal px-5 py-4 flex items-center gap-3 border-b border-gold/10">
-            <ShieldHeart className="text-gold" size={22} />
+            <ShieldCheck className="text-gold" size={22} />
             <div className="flex-1">
               <p className="font-display text-gold text-base leading-none">Bridge AI</p>
               <p className="text-ivory/40 text-[11px] mt-1">Gender support &amp; mental wellness</p>
