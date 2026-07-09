@@ -8,12 +8,14 @@ import {
   MessageSquare,
   Mail,
   BellRing,
+  CalendarClock,
   LogOut,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import ContentEditor from "../components/admin/ContentEditor";
 import MediaLibrary from "../components/admin/MediaLibrary";
 import ProjectsManager from "../components/admin/ProjectsManager";
+import EventsManager from "../components/admin/EventsManager";
 import FeedbackModeration from "../components/admin/FeedbackModeration";
 import SubscribersList from "../components/admin/SubscribersList";
 import PushComposer from "../components/admin/PushComposer";
@@ -22,6 +24,7 @@ const TABS = [
   { key: "content", label: "Site Content", icon: FileText },
   { key: "media", label: "Media Library", icon: Image },
   { key: "projects", label: "Projects & Events", icon: FolderKanban },
+  { key: "events", label: "Events & Programs", icon: CalendarClock },
   { key: "feedback", label: "Feedback Wall", icon: MessageSquare },
   { key: "subscribers", label: "Newsletter", icon: Mail },
   { key: "push", label: "Push Notifications", icon: BellRing },
@@ -85,6 +88,7 @@ export default function AdminDashboard() {
         {tab === "content" && <ContentEditor />}
         {tab === "media" && <MediaLibrary />}
         {tab === "projects" && <ProjectsManager />}
+        {tab === "events" && <EventsManager />}
         {tab === "feedback" && <FeedbackModeration />}
         {tab === "subscribers" && <SubscribersList />}
         {tab === "push" && <PushComposer />}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, HeartHandshake } from "lucide-react";
+import { Menu, X, HeartHandshake, CalendarClock } from "lucide-react";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -10,7 +10,13 @@ const NAV_LINKS = [
   { label: "Contact", href: "#footer" },
 ];
 
-export default function Header({ onTakeAction }: { onTakeAction: () => void }) {
+export default function Header({
+  onTakeAction,
+  onEvents,
+}: {
+  onTakeAction: () => void;
+  onEvents: () => void;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -26,15 +32,9 @@ export default function Header({ onTakeAction }: { onTakeAction: () => void }) {
         scrolled ? "bg-ink/95 backdrop-blur shadow-lg shadow-black/20" : "bg-ink"
       }`}
     >
-      <div className="container-page flex items-center justify-between h-20">
-        <a href="#top" className="flex items-center gap-3 shrink-0">
-          <img src="/logo.png" alt="B.A Connect Organization" className="h-12 w-12 object-contain" />
-          <span className="font-display text-gold text-lg sm:text-xl tracking-wide leading-tight">
-            B.A Connect
-            <span className="block text-[10px] font-label tracking-[0.3em] text-ivory/60 uppercase">
-              Organization
-            </span>
-          </span>
+      <div className="container-page flex items-center justify-between h-16 sm:h-20 py-2">
+        <a href="#top" className="shrink-0">
+          <img src="/logo.png" alt="B.A Connect Organization" className="h-11 w-11 sm:h-12 sm:w-12 object-contain" />
         </a>
 
         <nav className="hidden lg:flex items-center gap-8">
@@ -49,9 +49,19 @@ export default function Header({ onTakeAction }: { onTakeAction: () => void }) {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <button onClick={onTakeAction} className="hidden sm:inline-flex btn-gold">
-            <HeartHandshake size={16} />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onEvents}
+            className="hidden sm:inline-flex items-center gap-1.5 border border-gold/50 text-gold font-label font-semibold text-xs px-3.5 py-2 rounded-full hover:bg-gold hover:text-ink transition-colors"
+          >
+            <CalendarClock size={14} />
+            Events
+          </button>
+          <button
+            onClick={onTakeAction}
+            className="hidden sm:inline-flex items-center gap-1.5 bg-gold text-ink font-label font-semibold text-xs px-3.5 py-2 rounded-full hover:bg-gold-light transition-colors"
+          >
+            <HeartHandshake size={14} />
             Take Action
           </button>
           <button
@@ -59,7 +69,7 @@ export default function Header({ onTakeAction }: { onTakeAction: () => void }) {
             onClick={() => setMobileOpen((o) => !o)}
             aria-label="Toggle menu"
           >
-            {mobileOpen ? <X size={26} /> : <Menu size={26} />}
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
@@ -76,16 +86,28 @@ export default function Header({ onTakeAction }: { onTakeAction: () => void }) {
               {link.label}
             </a>
           ))}
-          <button
-            onClick={() => {
-              setMobileOpen(false);
-              onTakeAction();
-            }}
-            className="btn-gold justify-center sm:hidden"
-          >
-            <HeartHandshake size={16} />
-            Take Action
-          </button>
+          <div className="flex gap-2 sm:hidden">
+            <button
+              onClick={() => {
+                setMobileOpen(false);
+                onEvents();
+              }}
+              className="flex-1 inline-flex items-center justify-center gap-1.5 border border-gold/50 text-gold font-label font-semibold text-xs px-3.5 py-2.5 rounded-full"
+            >
+              <CalendarClock size={14} />
+              Events
+            </button>
+            <button
+              onClick={() => {
+                setMobileOpen(false);
+                onTakeAction();
+              }}
+              className="flex-1 inline-flex items-center justify-center gap-1.5 bg-gold text-ink font-label font-semibold text-xs px-3.5 py-2.5 rounded-full"
+            >
+              <HeartHandshake size={14} />
+              Take Action
+            </button>
+          </div>
         </div>
       )}
     </header>

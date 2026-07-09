@@ -13,9 +13,9 @@ export default function PhotoBanner() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
           </div>
-          <figcaption className="flex items-center justify-center gap-2 mt-5 font-display text-lg sm:text-2xl tracking-wide">
+          <figcaption className="flex items-center justify-center gap-2.5 mt-5 font-display text-lg sm:text-2xl tracking-wide">
             <span className="text-gold">WE</span>
-            <Heart size={22} className="fill-ink text-ink" />
+            <Heart size={30} className="fill-gold text-gold drop-shadow-[0_0_8px_rgba(201,162,39,0.6)]" />
             <span className="text-gold">B.A CONNECT ORGANIZATION</span>
           </figcaption>
         </figure>

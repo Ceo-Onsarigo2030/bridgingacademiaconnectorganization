@@ -9,17 +9,22 @@ interface Project {
   title: string;
   description: string;
   event_date: string;
+  venue: string;
   social_link: string | null;
   photos: string[];
 }
 
-const PROJECT_DEPARTMENTS = DEPARTMENTS.filter((d) => d.hasProjects);
+const DESTINATIONS = [
+  ...DEPARTMENTS.map((d) => ({ slug: d.slug, title: d.title })),
+  { slug: "general-moments", title: "★ General / Moments Gallery (homepage)" },
+];
 
 const EMPTY: Omit<Project, "id"> = {
-  department: PROJECT_DEPARTMENTS[0]?.slug || "",
+  department: DESTINATIONS[0].slug,
   title: "",
   description: "",
   event_date: "",
+  venue: "",
   social_link: "",
   photos: [],
 };
@@ -48,6 +53,7 @@ export default function ProjectsManager() {
       title: editing.title,
       description: editing.description,
       event_date: editing.event_date,
+      venue: editing.venue,
       social_link: editing.social_link || null,
       photos: editing.photos,
     };
@@ -72,19 +78,29 @@ export default function ProjectsManager() {
     setPhotoInput("");
   }
 
+  function destinationLabel(slug: string) {
+    return DESTINATIONS.find((d) => d.slug === slug)?.title || slug;
+  }
+
   return (
     <div>
+      <p className="text-sm text-ink/50 mb-4 max-w-lg">
+        Use this for both department stories and the general Moments gallery on the homepage.
+        Pick where each upload belongs when adding it below.
+      </p>
       <button onClick={() => setEditing({ ...EMPTY })} className="btn-gold mb-6">
         <Plus size={15} />
-        Add project or event
+        Add photo, video or project
       </button>
 
       <div className="grid sm:grid-cols-2 gap-4">
         {projects.map((p) => (
           <div key={p.id} className="bg-white rounded-xl border border-ink/10 p-4">
-            <p className="text-xs font-label text-gold-deep uppercase">{p.department}</p>
+            <p className="text-xs font-label text-gold-deep uppercase">{destinationLabel(p.department)}</p>
             <h4 className="font-display text-base mt-1">{p.title}</h4>
-            <p className="text-xs text-ink/50 mt-1">{p.event_date}</p>
+            <p className="text-xs text-ink/50 mt-1">
+              {p.event_date} {p.venue ? `· ${p.venue}` : ""}
+            </p>
             <p className="text-sm text-ink/60 mt-2 line-clamp-2">{p.description}</p>
             <div className="flex gap-3 mt-3">
               <button onClick={() => setEditing(p)} className="text-ink/40 hover:text-gold-deep">
@@ -104,19 +120,20 @@ export default function ProjectsManager() {
           <div className="relative bg-white rounded-2xl max-w-lg w-full p-6 space-y-3 max-h-[85vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="font-display text-lg">
-                {"id" in editing && editing.id ? "Edit" : "New"} project / event
+                {"id" in editing && editing.id ? "Edit" : "New"} upload
               </h3>
               <button onClick={() => setEditing(null)}>
                 <X size={18} />
               </button>
             </div>
 
+            <label className="block text-xs font-label text-ink/50">Where does this belong?</label>
             <select
               value={editing.department}
               onChange={(e) => setEditing({ ...editing, department: e.target.value })}
               className="w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
             >
-              {PROJECT_DEPARTMENTS.map((d) => (
+              {DESTINATIONS.map((d) => (
                 <option key={d.slug} value={d.slug}>
                   {d.title}
                 </option>
@@ -128,12 +145,20 @@ export default function ProjectsManager() {
               onChange={(e) => setEditing({ ...editing, title: e.target.value })}
               className="w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
             />
-            <input
-              placeholder="Date (e.g. 12 July 2026)"
-              value={editing.event_date}
-              onChange={(e) => setEditing({ ...editing, event_date: e.target.value })}
-              className="w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
-            />
+            <div className="grid grid-cols-2 gap-2">
+              <input
+                placeholder="Date (e.g. 12 July 2026)"
+                value={editing.event_date}
+                onChange={(e) => setEditing({ ...editing, event_date: e.target.value })}
+                className="w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+              />
+              <input
+                placeholder="Venue"
+                value={editing.venue}
+                onChange={(e) => setEditing({ ...editing, venue: e.target.value })}
+                className="w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
+              />
+            </div>
             <textarea
               placeholder="Short description of what happened"
               rows={3}
@@ -150,7 +175,8 @@ export default function ProjectsManager() {
 
             <div>
               <p className="text-xs font-label text-ink/50 mb-1">
-                Photo URLs (paste from Media Library, 4-7 recommended)
+                Photo or video URLs (upload in Media Library first, then paste the link here —
+                3 to 7 recommended, first one is the cover)
               </p>
               <div className="flex gap-2">
                 <input
@@ -181,7 +207,7 @@ export default function ProjectsManager() {
             </div>
 
             <button onClick={handleSave} className="btn-gold w-full justify-center mt-2">
-              Save project
+              Save
             </button>
           </div>
         </div>

@@ -86,6 +86,7 @@ create table if not exists department_projects (
   title text not null,
   description text,
   event_date text,
+  venue text,
   social_link text,
   photos text[] default '{}',
   created_at timestamptz default now()
@@ -176,6 +177,56 @@ create policy "Admins can delete media"
     bucket_id in ('photos', 'videos', 'articles')
     and auth.role() = 'authenticated'
   );
+
+-- ============================================================
+-- 8. ORGANIZATION EVENTS & PROGRAMS (shown via the header Events button)
+-- ============================================================
+create table if not exists events (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text,
+  event_date text,
+  location text,
+  created_at timestamptz default now()
+);
+
+alter table events enable row level security;
+
+create policy "Public can read events"
+  on events for select
+  using (true);
+
+create policy "Admins can manage events"
+  on events for all
+  using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
+
+-- ============================================================
+-- 9. BRIDGE AI KNOWLEDGE BASE (from B.A Connect's training manuals)
+-- ============================================================
+create table if not exists bridge_ai_knowledge (
+  id uuid primary key default gen_random_uuid(),
+  category text not null,
+  source_title text,
+  section text,
+  content text not null,
+  search_vector tsvector generated always as (to_tsvector('english', coalesce(section,'') || ' ' || content)) stored,
+  created_at timestamptz default now()
+);
+
+create index if not exists bridge_ai_knowledge_search_idx on bridge_ai_knowledge using gin (search_vector);
+create index if not exists bridge_ai_knowledge_category_idx on bridge_ai_knowledge (category);
+
+alter table bridge_ai_knowledge enable row level security;
+
+create policy "Public can read knowledge base"
+  on bridge_ai_knowledge for select
+  using (true);
+
+create policy "Admins can manage knowledge base"
+  on bridge_ai_knowledge for all
+  using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
 
 -- ============================================================
 -- 7. SEED: create your first admin account

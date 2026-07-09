@@ -33,8 +33,9 @@ npm run dev
 
 ## 3. Bridge AI (the floating support widget)
 
-Bridge AI runs as a Supabase Edge Function that calls the Anthropic API, so your
-API key never sits in the browser.
+Bridge AI now runs on B.A Connect's own training manuals — the Constitution, the Personality guide, and 13 topic manuals (GBV, mental health, trauma, child protection, domestic violence, sexual harassment, youth empowerment, civic education, and more). These were split into 227 searchable sections and are stored permanently in the `bridge_ai_knowledge` table. Every time someone messages Bridge AI, the edge function searches that table for the most relevant sections and hands them to Claude as grounded reference material, alongside a condensed, always-on version of the Constitution's identity, values, and tone rules.
+
+**One-time setup:**
 
 ```bash
 npm install -g supabase
@@ -44,10 +45,11 @@ supabase secrets set ANTHROPIC_API_KEY=sk-ant-your-key-here
 supabase functions deploy bridge-ai --no-verify-jwt
 ```
 
-The widget's knowledge (Kenyan law on GBV, the Children Act, mental health
-resources and helplines) lives in the system prompt inside
-`supabase/functions/bridge-ai/index.ts`. Edit that file any time you want to
-refine what it knows or how it responds, then redeploy with the same command.
+That's the only secret you need to set — `SUPABASE_URL` and `SUPABASE_ANON_KEY` are provided automatically inside every edge function.
+
+**Loading the knowledge base:** after running `schema.sql` (which creates the `bridge_ai_knowledge` table), also run `supabase/migrations/knowledge_seed.sql` in the SQL Editor — this is the one that actually loads all 227 sections from your manuals. It's a separate file because it's large; run `schema.sql` first, then this one.
+
+**Updating what Bridge AI knows later:** you don't need to redeploy anything to update its knowledge — just edit or add rows in the `bridge_ai_knowledge` table (via SQL Editor or Table Editor in Supabase), and the next message Bridge AI answers will pull from the updated content immediately. To change its personality or core behavior rules, edit the `CORE_IDENTITY` text inside `supabase/functions/bridge-ai/index.ts` and redeploy with the same command above.
 
 ## 4. Push notifications
 

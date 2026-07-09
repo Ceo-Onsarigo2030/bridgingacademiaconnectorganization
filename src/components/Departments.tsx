@@ -70,14 +70,12 @@ export default function Departments() {
                 <p className="text-sm leading-relaxed text-ink/75">{active.philosophy}</p>
               </div>
 
-              {active.hasProjects && (
-                <div>
-                  <p className="font-label text-xs font-semibold uppercase tracking-wide text-gold-deep mb-2">
-                    Projects &amp; Events
-                  </p>
-                  <DepartmentProjects department={active.slug} />
-                </div>
-              )}
+              <div>
+                <p className="font-label text-xs font-semibold uppercase tracking-wide text-gold-deep mb-2">
+                  Projects &amp; Events
+                </p>
+                <DepartmentProjects department={active.slug} />
+              </div>
             </div>
           </div>
         </div>

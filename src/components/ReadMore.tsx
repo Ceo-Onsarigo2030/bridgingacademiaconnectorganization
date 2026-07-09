@@ -5,10 +5,12 @@ export default function ReadMore({
   children,
   collapsedHeight = 120,
   label = "Read more",
+  dark = false,
 }: {
   children: React.ReactNode;
   collapsedHeight?: number;
   label?: string;
+  dark?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -26,7 +28,9 @@ export default function ReadMore({
       </div>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="mt-3 inline-flex items-center gap-1 text-gold-deep font-label text-sm font-semibold hover:text-gold transition-colors"
+        className={`mt-3 inline-flex items-center gap-1 font-label text-sm font-semibold transition-colors ${
+          dark ? "text-gold hover:text-gold-light" : "text-gold-deep hover:text-gold"
+        }`}
       >
         {open ? "Show less" : label}
         <ChevronDown

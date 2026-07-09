@@ -18,11 +18,16 @@ Guided by principles of inclusivity, integrity, equity, and mental well-being, w
 
 Through mentorship, empowerment, and collaboration, we aim to shape a generation of socially conscious leaders equipped to transform communities and champion a more just, equitable, and thriving society.`;
 
-function Paragraphs({ text }: { text: string }) {
+function Paragraphs({ text, dark = false }: { text: string; dark?: boolean }) {
   return (
     <>
       {text.split("\n\n").map((p, i) => (
-        <p key={i} className="text-sm sm:text-base leading-relaxed text-ink/75 mt-3 first:mt-0">
+        <p
+          key={i}
+          className={`text-sm sm:text-base leading-relaxed mt-3 first:mt-0 ${
+            dark ? "text-ivory/80" : "text-ink/75"
+          }`}
+        >
           {p}
         </p>
       ))}
@@ -48,17 +53,17 @@ export default function About() {
         <div className="grid sm:grid-cols-2 gap-6 mt-14 max-w-4xl mx-auto">
           <div className="bg-ink rounded-2xl p-7">
             <p className="eyebrow text-gold">Our Mission &amp; Vision</p>
-            <div className="mt-3 text-ivory/80">
-              <ReadMore collapsedHeight={90}>
-                <Paragraphs text={MISSION} />
+            <div className="mt-3">
+              <ReadMore collapsedHeight={90} dark>
+                <Paragraphs text={MISSION} dark />
               </ReadMore>
             </div>
           </div>
           <div className="bg-ink rounded-2xl p-7">
             <p className="eyebrow text-gold">Our Philosophy</p>
-            <div className="mt-3 text-ivory/80">
-              <ReadMore collapsedHeight={90}>
-                <Paragraphs text={PHILOSOPHY} />
+            <div className="mt-3">
+              <ReadMore collapsedHeight={90} dark>
+                <Paragraphs text={PHILOSOPHY} dark />
               </ReadMore>
             </div>
           </div>

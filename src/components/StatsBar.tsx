@@ -15,20 +15,32 @@ const DEFAULT_STATS: Stat[] = [
 export default function StatsBar() {
   const { value: STATS } = useSiteContent<Stat[]>("stats", DEFAULT_STATS);
   return (
-    <section className="bg-ivory border-b border-ink/5">
-      <div className="container-page py-10 sm:py-12">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
-          {STATS.map((s, i) => (
-            <div
-              key={s.label}
-              className={`text-center lg:text-left ${i < 3 ? "lg:border-r lg:border-ink/10 lg:pr-6" : ""}`}
-            >
-              <p className="font-display text-2xl sm:text-3xl text-gold-deep">{s.value}</p>
-              <p className="font-label text-xs sm:text-sm uppercase tracking-wide text-ink/60 mt-1">
-                {s.label}
-              </p>
-            </div>
-          ))}
+    <section className="bg-ivory py-10 sm:py-14">
+      <div className="container-page">
+        <div className="bg-ink rounded-2xl overflow-hidden border border-gold/20">
+          <div className="grid grid-cols-2 lg:grid-cols-4">
+            {STATS.map((s, i) => {
+              const isRightColMobile = i % 2 === 0;
+              const isTopRowMobile = i < 2;
+              const isLastCol = i === STATS.length - 1;
+              return (
+                <div
+                  key={s.label}
+                  className={`px-5 py-7 sm:py-9 text-center border-gold/15
+                    ${isRightColMobile ? "border-r" : ""}
+                    ${isTopRowMobile ? "border-b" : ""}
+                    lg:border-b-0
+                    ${!isLastCol ? "lg:border-r" : "lg:border-r-0"}
+                  `}
+                >
+                  <p className="font-display text-2xl sm:text-3xl text-gold">{s.value}</p>
+                  <p className="font-label text-[11px] sm:text-xs uppercase tracking-wider text-ivory/70 mt-2">
+                    {s.label}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
