@@ -32,12 +32,12 @@ export default function Header({
         scrolled ? "bg-ink/95 backdrop-blur shadow-lg shadow-black/20" : "bg-ink"
       }`}
     >
-      <div className="container-page flex items-center justify-between h-16 sm:h-20 py-2">
+      <div className="container-page flex items-center justify-between h-16 sm:h-20 py-2 gap-2">
         <a href="#top" className="shrink-0">
-          <img src="/logo.png" alt="B.A Connect Organization" className="h-11 w-11 sm:h-12 sm:w-12 object-contain" />
+          <img src="/logo.png" alt="B.A Connect Organization" className="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
         </a>
 
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-8 flex-1 justify-center">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
@@ -49,27 +49,27 @@ export default function Header({
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button
             onClick={onEvents}
-            className="hidden sm:inline-flex items-center gap-1.5 border border-gold/50 text-gold font-label font-semibold text-xs px-3.5 py-2 rounded-full hover:bg-gold hover:text-ink transition-colors"
+            className="inline-flex items-center gap-1 sm:gap-1.5 border border-gold/50 text-gold font-label font-semibold text-[11px] sm:text-xs px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full hover:bg-gold hover:text-ink transition-colors whitespace-nowrap"
           >
-            <CalendarClock size={14} />
+            <CalendarClock size={13} />
             Events
           </button>
           <button
             onClick={onTakeAction}
-            className="hidden sm:inline-flex items-center gap-1.5 bg-gold text-ink font-label font-semibold text-xs px-3.5 py-2 rounded-full hover:bg-gold-light transition-colors"
+            className="inline-flex items-center gap-1 sm:gap-1.5 bg-gold text-ink font-label font-semibold text-[11px] sm:text-xs px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full hover:bg-gold-light transition-colors whitespace-nowrap"
           >
-            <HeartHandshake size={14} />
+            <HeartHandshake size={13} />
             Take Action
           </button>
           <button
-            className="lg:hidden text-ivory"
+            className="lg:hidden text-ivory shrink-0"
             onClick={() => setMobileOpen((o) => !o)}
             aria-label="Toggle menu"
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
@@ -86,28 +86,6 @@ export default function Header({
               {link.label}
             </a>
           ))}
-          <div className="flex gap-2 sm:hidden">
-            <button
-              onClick={() => {
-                setMobileOpen(false);
-                onEvents();
-              }}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 border border-gold/50 text-gold font-label font-semibold text-xs px-3.5 py-2.5 rounded-full"
-            >
-              <CalendarClock size={14} />
-              Events
-            </button>
-            <button
-              onClick={() => {
-                setMobileOpen(false);
-                onTakeAction();
-              }}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 bg-gold text-ink font-label font-semibold text-xs px-3.5 py-2.5 rounded-full"
-            >
-              <HeartHandshake size={14} />
-              Take Action
-            </button>
-          </div>
         </div>
       )}
     </header>

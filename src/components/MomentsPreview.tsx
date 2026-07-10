@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CalendarDays, ArrowRight } from "lucide-react";
+import { CalendarDays, ArrowRight, Newspaper } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { isVideoUrl } from "../lib/media";
 
@@ -38,10 +38,16 @@ export default function MomentsPreview() {
               our community.
             </p>
           </div>
-          <a href="/moments" className="btn-gold shrink-0">
-            Explore Gallery
-            <ArrowRight size={16} />
-          </a>
+          <div className="flex gap-2 shrink-0">
+            <a href="/articles" className="btn-outline !text-ink !border-ink/20 hover:!bg-ink hover:!text-gold">
+              <Newspaper size={16} />
+              Articles &amp; News
+            </a>
+            <a href="/moments" className="btn-gold">
+              Explore Gallery
+              <ArrowRight size={16} />
+            </a>
+          </div>
         </div>
 
         {moments.length === 0 ? (

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Plus, Trash2, Pencil, X } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { DEPARTMENTS } from "../../lib/departmentsData";
+import MediaUploader from "./MediaUploader";
+import CopyLinkBox from "./CopyLinkBox";
 
 interface Project {
   id: string;
@@ -32,7 +34,7 @@ const EMPTY: Omit<Project, "id"> = {
 export default function ProjectsManager() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [editing, setEditing] = useState<Project | (Omit<Project, "id"> & { id?: string }) | null>(null);
-  const [photoInput, setPhotoInput] = useState("");
+  const [savedId, setSavedId] = useState<string | null>(null);
 
   useEffect(() => {
     load();
@@ -59,10 +61,11 @@ export default function ProjectsManager() {
     };
     if ("id" in editing && editing.id) {
       await supabase.from("department_projects").update(payload).eq("id", editing.id);
+      setSavedId(editing.id);
     } else {
-      await supabase.from("department_projects").insert(payload);
+      const { data } = await supabase.from("department_projects").insert(payload).select().single();
+      if (data) setSavedId(data.id);
     }
-    setEditing(null);
     load();
   }
 
@@ -70,12 +73,6 @@ export default function ProjectsManager() {
     if (!confirm("Delete this project card?")) return;
     await supabase.from("department_projects").delete().eq("id", id);
     load();
-  }
-
-  function addPhoto() {
-    if (!photoInput.trim() || !editing) return;
-    setEditing({ ...editing, photos: [...editing.photos, photoInput.trim()] });
-    setPhotoInput("");
   }
 
   function destinationLabel(slug: string) {
@@ -86,9 +83,16 @@ export default function ProjectsManager() {
     <div>
       <p className="text-sm text-ink/50 mb-4 max-w-lg">
         Use this for both department stories and the general Moments gallery on the homepage.
-        Pick where each upload belongs when adding it below.
+        Pick where each upload belongs, add up to 8 photos or videos, and you'll get a shareable
+        link when you save — paste that into Push Notifications to announce it immediately.
       </p>
-      <button onClick={() => setEditing({ ...EMPTY })} className="btn-gold mb-6">
+      <button
+        onClick={() => {
+          setEditing({ ...EMPTY });
+          setSavedId(null);
+        }}
+        className="btn-gold mb-6"
+      >
         <Plus size={15} />
         Add photo, video or project
       </button>
@@ -102,8 +106,17 @@ export default function ProjectsManager() {
               {p.event_date} {p.venue ? `· ${p.venue}` : ""}
             </p>
             <p className="text-sm text-ink/60 mt-2 line-clamp-2">{p.description}</p>
+            <div className="mt-3">
+              <CopyLinkBox path={`/story/${p.id}`} />
+            </div>
             <div className="flex gap-3 mt-3">
-              <button onClick={() => setEditing(p)} className="text-ink/40 hover:text-gold-deep">
+              <button
+                onClick={() => {
+                  setEditing(p);
+                  setSavedId(null);
+                }}
+                className="text-ink/40 hover:text-gold-deep"
+              >
                 <Pencil size={14} />
               </button>
               <button onClick={() => handleDelete(p.id)} className="text-ink/40 hover:text-red-500">
@@ -126,6 +139,15 @@ export default function ProjectsManager() {
                 <X size={18} />
               </button>
             </div>
+
+            {savedId && (
+              <div>
+                <p className="text-xs font-label text-green-700 font-semibold mb-1">
+                  Saved! Here's the link to use in a push notification:
+                </p>
+                <CopyLinkBox path={`/story/${savedId}`} />
+              </div>
+            )}
 
             <label className="block text-xs font-label text-ink/50">Where does this belong?</label>
             <select
@@ -173,38 +195,11 @@ export default function ProjectsManager() {
               className="w-full rounded-lg border border-ink/15 px-3 py-2 text-sm"
             />
 
-            <div>
-              <p className="text-xs font-label text-ink/50 mb-1">
-                Photo or video URLs (upload in Media Library first, then paste the link here —
-                3 to 7 recommended, first one is the cover)
-              </p>
-              <div className="flex gap-2">
-                <input
-                  value={photoInput}
-                  onChange={(e) => setPhotoInput(e.target.value)}
-                  placeholder="https://..."
-                  className="flex-1 rounded-lg border border-ink/15 px-3 py-2 text-sm"
-                />
-                <button onClick={addPhoto} className="btn-outline !text-ink !border-ink/20 !py-2">
-                  Add
-                </button>
-              </div>
-              <ul className="mt-2 space-y-1">
-                {editing.photos.map((url, i) => (
-                  <li key={i} className="text-xs text-ink/50 truncate flex justify-between gap-2">
-                    <span className="truncate">{url}</span>
-                    <button
-                      onClick={() =>
-                        setEditing({ ...editing, photos: editing.photos.filter((_, j) => j !== i) })
-                      }
-                      className="text-red-400 shrink-0"
-                    >
-                      remove
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <MediaUploader
+              urls={editing.photos}
+              onChange={(photos) => setEditing({ ...editing, photos })}
+              max={8}
+            />
 
             <button onClick={handleSave} className="btn-gold w-full justify-center mt-2">
               Save

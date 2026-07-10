@@ -8,6 +8,7 @@ interface EventItem {
   description: string;
   event_date: string;
   location: string;
+  poster_image: string | null;
 }
 
 export default function EventsModal({ onClose }: { onClose: () => void }) {
@@ -55,7 +56,14 @@ export default function EventsModal({ onClose }: { onClose: () => void }) {
           )}
 
           {events.map((e) => (
-            <div key={e.id} className="bg-white rounded-xl border border-ink/10 p-5">
+            <a
+              key={e.id}
+              href={`/event/${e.id}`}
+              className="block bg-white rounded-xl border border-ink/10 p-5 hover:border-gold/40 transition-colors"
+            >
+              {e.poster_image && (
+                <img src={e.poster_image} alt={e.title} className="w-full h-32 object-cover rounded-lg mb-3" />
+              )}
               <div className="flex items-center gap-1.5 text-xs font-label text-gold-deep">
                 <CalendarClock size={13} />
                 {e.event_date}
@@ -68,7 +76,7 @@ export default function EventsModal({ onClose }: { onClose: () => void }) {
                 </div>
               )}
               <p className="text-sm text-ink/70 mt-2 leading-relaxed">{e.description}</p>
-            </div>
+            </a>
           ))}
 
           <div className="bg-ink/5 rounded-xl p-5 space-y-3">
