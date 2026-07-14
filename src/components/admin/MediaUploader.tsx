@@ -6,41 +6,63 @@ import { isVideoUrl } from "../../lib/media";
 export default function MediaUploader({
   urls,
   onChange,
-  max = 8,
+  maxPhotos = 13,
+  maxVideos = 2,
 }: {
   urls: string[];
   onChange: (urls: string[]) => void;
-  max?: number;
+  maxPhotos?: number;
+  maxVideos?: number;
 }) {
   const [uploading, setUploading] = useState(false);
+  const [warning, setWarning] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const photoCount = urls.filter((u) => !isVideoUrl(u)).length;
+  const videoCount = urls.filter(isVideoUrl).length;
+  const max = maxPhotos + maxVideos;
 
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
-    const remaining = max - urls.length;
-    const toUpload = Array.from(files).slice(0, remaining);
-    if (toUpload.length === 0) return;
+    setWarning("");
+
+    let photosLeft = maxPhotos - photoCount;
+    let videosLeft = maxVideos - videoCount;
+    const newUrls: string[] = [];
+    let skipped = 0;
 
     setUploading(true);
-    const newUrls: string[] = [];
-    for (const file of toUpload) {
+    for (const file of Array.from(files)) {
       const isVideo = file.type.startsWith("video/");
+      if (isVideo && videosLeft <= 0) {
+        skipped++;
+        continue;
+      }
+      if (!isVideo && photosLeft <= 0) {
+        skipped++;
+        continue;
+      }
       const bucket = isVideo ? "videos" : "photos";
       const path = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
       const { error } = await supabase.storage.from(bucket).upload(path, file);
       if (!error) {
         newUrls.push(supabase.storage.from(bucket).getPublicUrl(path).data.publicUrl);
+        if (isVideo) videosLeft--;
+        else photosLeft--;
       }
     }
     onChange([...urls, ...newUrls]);
     setUploading(false);
+    if (skipped > 0) {
+      setWarning(`${skipped} file(s) skipped — limit is ${maxPhotos} photos and ${maxVideos} videos.`);
+    }
     if (inputRef.current) inputRef.current.value = "";
   }
 
   return (
     <div>
       <p className="text-xs font-label text-ink/50 mb-1.5">
-        Photos or videos — {urls.length}/{max} added
+        Photos {photoCount}/{maxPhotos} · Videos {videoCount}/{maxVideos}
       </p>
 
       {urls.length < max && (
@@ -64,6 +86,7 @@ export default function MediaUploader({
           />
         </label>
       )}
+      {warning && <p className="text-xs text-red-500 mt-1.5">{warning}</p>}
 
       {urls.length > 0 && (
         <div className="grid grid-cols-4 gap-2 mt-3">

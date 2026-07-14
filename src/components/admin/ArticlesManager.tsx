@@ -226,7 +226,7 @@ export default function ArticlesManager() {
             <MediaUploader
               urls={editing.cover_image ? [editing.cover_image] : []}
               onChange={(urls) => setEditing({ ...editing, cover_image: urls[0] || null })}
-              max={1}
+              maxPhotos={1} maxVideos={0}
             />
             <label className="flex items-center gap-2 text-sm text-ink/70">
               <input

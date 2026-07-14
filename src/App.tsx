@@ -11,6 +11,7 @@ import Initiatives from "./components/Initiatives";
 import Departments from "./components/Departments";
 import Achievements from "./components/Achievements";
 import MomentsPreview from "./components/MomentsPreview";
+import ArticlesTeaser from "./components/ArticlesTeaser";
 import FeedbackWall from "./components/FeedbackWall";
 import Newsletter from "./components/Newsletter";
 import Footer from "./components/Footer";
@@ -34,6 +35,7 @@ export default function App() {
         <Departments />
         <Achievements />
         <MomentsPreview />
+        <ArticlesTeaser />
         <FeedbackWall />
         <Newsletter />
       </main>

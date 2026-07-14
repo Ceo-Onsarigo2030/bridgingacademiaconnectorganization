@@ -198,7 +198,8 @@ export default function ProjectsManager() {
             <MediaUploader
               urls={editing.photos}
               onChange={(photos) => setEditing({ ...editing, photos })}
-              max={8}
+              maxPhotos={13}
+              maxVideos={2}
             />
 
             <button onClick={handleSave} className="btn-gold w-full justify-center mt-2">

@@ -45,6 +45,9 @@ export default function ArticlesListPage() {
       </div>
 
       <div className="container-page py-10 sm:py-16">
+        <p className="text-ink/60 text-sm sm:text-base mb-8 max-w-lg">
+          Official updates, stories, and announcements.
+        </p>
         {loading && <p className="text-center text-ink/40 text-sm">Loading…</p>}
         {!loading && articles.length === 0 && (
           <div className="border border-dashed border-ink/15 rounded-xl p-10 text-center max-w-lg mx-auto">

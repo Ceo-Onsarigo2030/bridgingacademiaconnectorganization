@@ -63,6 +63,7 @@ export default function FeedbackWall() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Your name (optional)"
+            maxLength={80}
             className="w-full rounded-lg px-4 py-2.5 border border-ink/15 text-sm focus:outline-none focus:border-gold"
           />
           <textarea
@@ -70,6 +71,7 @@ export default function FeedbackWall() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Share your feedback or suggestion..."
+            maxLength={1000}
             rows={3}
             className="w-full rounded-lg px-4 py-2.5 border border-ink/15 text-sm focus:outline-none focus:border-gold resize-none"
           />

@@ -166,7 +166,7 @@ export default function EventsManager() {
             <MediaUploader
               urls={editing.poster_image ? [editing.poster_image] : []}
               onChange={(urls) => setEditing({ ...editing, poster_image: urls[0] || null })}
-              max={1}
+              maxPhotos={1} maxVideos={0}
             />
 
             <label className="flex items-center gap-2 text-sm text-ink/70 mt-2">

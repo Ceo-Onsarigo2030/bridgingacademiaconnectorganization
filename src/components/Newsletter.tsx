@@ -35,6 +35,7 @@ export default function Newsletter() {
             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mt-6">
               <input
                 type="email"
+                maxLength={200}
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

@@ -13,7 +13,7 @@ const LINKS = [
   { label: "Website", href: "https://inter-universitynexusplatform.vercel.app/", icon: ExternalLink },
   { label: "Instagram", href: "https://www.instagram.com/uninexus_connect?igsh=MWswaWlpcHJvYW01Nw==", icon: Instagram },
   { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61590819024582&mibextid=ZbWKwL", icon: Facebook },
-  { label: "TikTok", href: "https://tiktok.com/@uninexus_connect", icon: Music2 },
+  { label: "TikTok", href: "https://tiktok.com/@uninexus_platform", icon: Music2 },
   { label: "Email", href: "mailto:uninexusplatformke@gmail.com", icon: Mail },
 ];
 

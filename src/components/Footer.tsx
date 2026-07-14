@@ -53,7 +53,7 @@ export default function Footer() {
               &copy; {new Date().getFullYear()} B.A Connect Organization. All rights reserved.
             </p>
             <a href="/admin" className="text-ivory/20 text-[11px] hover:text-ivory/50 mt-1 inline-block">
-              Admin
+              B.A CONNECT IS HOME
             </a>
           </div>
         </div>

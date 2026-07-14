@@ -97,6 +97,7 @@ export default function BridgePage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type here, this is a safe space..."
+          maxLength={2000}
           className="flex-1 bg-white/5 rounded-full px-5 py-3 text-sm text-ivory placeholder:text-ivory/30 focus:outline-none focus:ring-1 focus:ring-gold/50"
         />
         <button
