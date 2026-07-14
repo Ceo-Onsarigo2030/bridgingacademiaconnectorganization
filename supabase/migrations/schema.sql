@@ -106,6 +106,7 @@ create table if not exists department_projects (
 );
 
 alter table department_projects add column if not exists venue text;
+alter table department_projects add column if not exists likes int default 0;
 
 alter table department_projects enable row level security;
 
@@ -119,6 +120,24 @@ create policy "Admins can manage department projects"
   on department_projects for all
   using (auth.role() = 'authenticated')
   with check (auth.role() = 'authenticated');
+
+-- Atomic "like" increment so simultaneous reactions from different visitors
+-- never overwrite each other. Callable by anyone (it's just a public reaction).
+create or replace function increment_project_likes(project_id uuid)
+returns int
+language plpgsql
+security definer
+as $$
+declare
+  new_count int;
+begin
+  update department_projects
+  set likes = coalesce(likes, 0) + 1
+  where id = project_id
+  returning likes into new_count;
+  return new_count;
+end;
+$$;
 
 -- ============================================================
 -- 5. PUSH NOTIFICATIONS
